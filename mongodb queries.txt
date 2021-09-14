@@ -1,0 +1,87 @@
+ 1] Write a Query to display all employess?      db.stud.find()
+
+2] Write a Query to display all employess working in dept 10?    db.stud.find({dept:10},{name:1}).pretty()
+
+3] WQTD whose phn no strt with 10 times 9?          db.stud.find({phone:9999999999}).pretty()
+
+4]  WQTD who r residing in mumbai?                   db.stud.find({"address.city":"mumbai"}).pretty()
+
+5]  WQTD whose dno is 123?                           db.stud.find({"address.dno":123}).pretty()
+
+6] WQTD all employess name?                         db.stud.find({},{name:1}).pretty()
+
+7]WQTD address and name of employes living in dharwad?  db.stud.find({"address.city":"Dharwad"},{name:1,address:1,_id:0}).pretty
+
+8] WQTD name and email whose salar is 10000?        db.stud.find({"salary":10000},{name:1,email:1,_id:0}).pretty()
+
+10] WQTD whose slary is <40000 and working in dept 10?  db.stud.find({salary:{$lt:40000},dept:10},{name:1}).pretty()
+
+9]  whose salary is less than 5000?                      b.stud.find({salary:{$gt:5000},{name:1,_id:0})
+
+11]    salary is >10000 and living in dharwad?            db.stud.find({salary:{$gt:10000},"address.city":"Dharwad"},{name:1,_id:0}).pretty()
+
+12] whose slary is !=30000?                                   db.stud.find({salary:{$ne:30000}},{name:1,_id:0}).pretty()
+
+13]WQTD whose salary is 5000,10000,40000 ?                    db.stud.find({salary:{$in:[5000,10000,40000]}},{name:1,_id:0}).pretty()
+
+14]  WQTD whose salary is 5000,10000,40000 ?                 db.stud.find({salary:{$nin:[5000,10000,40000]}},{name:1,_id:0}).pretty()
+
+15] WQTD who rin hyderabd or mumbai ?                        db.stud.find({"address.city":{$in:["Mumbai","Hyderabad"]}},{name:1,_id:0}).pretty()
+
+16] WQTD whose slary is  not >20000?                            db.stud.find({salary:{$not:{$gt:20000}}}).pretty()
+
+17]   WQTD whose slary is <5000 and city is hyderabad?           db.stud.find({$and:[{"address.city":"Hyderabad"},{salary:{$lt:30000}}]}).pretty()
+18]db.stud.find({$nor:[{"address.city":"Hyderabad"},{salary:{$lt:10000}}]}).pretty()
+19] db.stud.find({$nor:[{"address.city":"Mumbai"},{salary:{$gte:30000}}]}).pretty()
+20] db.stud.find({$or:[{"address.city":"Mumbai"},{"address.city":"Hyderabad"}]})
+
+=>ELEMENT OPERATOR:-
+             [ EXISTS OPERATOR]
+db.stud.insert({_id:1240,name:"john",temporary:true})
+db.stud.find({temporary:{$exists:true}})
+ db.stud.find({temporary:{$exists:false}})
+                    
+            [TYPE OPERATOR(first update a feild)]
+ to update salary of id-1237    -   db.stud.update({_id:1237},{$set:{salary:"ten thousand"}})
+db.stud.find({salary:{$type:"number"}}).pretty()
+db.stud.find({salary:{$type:"string"}}).pretty()
+
+         [ LIMIT OPERATOR]
+1]  WQTD 3 employes-     db.stud.find({},{name:1,_id:0}).limit(3)
+2]  WQTD 3 employes with slaray      -db.stud.find({salary:{$type:"number"}},{name:1,_id:0}).limit(3)
+
+
+         [COUNT OPERATOR]
+db.stud.find({},{name:1,_id:0}).count()-  7
+ db.stud.find({},{name:1,_id:0}).limit(3).count() --7
+
+    [SORT operator]
+1] WQTD emp in ascending order----- db.stud.find({},{name:1,_id:0,salary:1}).sort({salary:1})
+2]  WQTD emp in descending order-----
+db.stud.find({},{name:1,_id:0,salary:1}).sort({salary:-1})
+
+Q] WQTD name and salary of 2 higly paid employess?
+ db.stud.find({},{salary:1,name:1}).sort({salary:-1}).limit(2)
+
+         UPDATE OPERATOR
+1]first insert a dummy data-------  db.stud.insert({_id:1241,name:"suresh",salary:8000,dept:20})
+ then update it-----   db.stud.update({_id:1241},{salary:80000})  // it will replace all the feilds becoz we r not using update opeator
+          USING  UPDATE OPERATOR
+
+1] db.stud.update({_id:1234},{$set:{salary:6000}})   //using set opertaor
+2]db.stud.update({},{$rename:{salary:"sal"}})
+3]db.stud.update({},{$rename:{salary:"sal"}},{multi:true}) //for all felids
+ 3]db.stud.update({},{$inc:{sal:500}},{multi:true})          //increment sal by 500
+4]db.stud.update({_id:1238},{$unset:{"address.dno":""}})      //remove feild for id 1238
+5]db.stud.update({_id:9999},{$set:{sal:50000}})
+6]db.stud.update({_id:9999},{$set:{sal:50000}},{upsert:true})    
+
+
+1] WQTD TO INCREMENT THE SALARY BT 25%?    db.stud.update({},{$mul:{sal:1.25}},{multi:true})
+3] WQTD TO DECREMENT THE SALARY BT 5%?   db.stud.update({_id:1236},{$mul:{sal:0.95}})
+ 5]WQTD RENAME THE CITY FEILD TO TOWN?      db.stud.update({},{$rename:{"address.city":"address.town"}},{multi:true})
+6] WQTD TO ENSURE PEOPLE OF MUMBAI WILL NOT HAVE PINCODE FEILD?  
+b.stud.update({"address.city":"Mumbai"},{$unset:{"address.pincode":""}}) //if not modified the name of city
+  or    db.stud.update({"town":"Mumbai"},{$unset:{"address.pincode":""}})
+
+db.stud.remove({_id:9999})
